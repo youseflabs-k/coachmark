@@ -51,16 +51,14 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  coachmark: ^0.1.0
+  coachmark: ^latest_version
 ```
 
-Then run:
+Or run:
 
 ```bash
-flutter pub get
+flutter pub add coachmark
 ```
-
-> **Latest Version:** Check [pub.dev](https://pub.dev/packages/coachmark) for the most recent version.
 
 ---
 
