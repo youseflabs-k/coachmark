@@ -1,0 +1,21 @@
+name: coachmark
+description: A Flutter package for creating beautiful, customizable coach marks and onboarding overlays with dynamic target highlighting.
+version: 0.1.0
+homepage: https://github.com/youseflabs-k/coachmark
+repository: https://github.com/youseflabs-k/coachmark
+issue_tracker: https://github.com/youseflabs-k/coachmark/issues
+
+environment:
+  sdk: ^3.5.0
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
