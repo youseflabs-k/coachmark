@@ -30,8 +30,6 @@
 
 ---
 
----
-
 ## ✨ Features
 
 - 🎯 **Dynamic Highlighting** - Wrap any widget to highlight it with a coach mark overlay
@@ -39,7 +37,15 @@
 - 📱 **Smart Positioning** - Automatically adjusts bubble position based on available screen space
 - 🧭 **Position Control** - Auto-detect the best position or manually specify preferred placement
 - 🌗 **Dimmed Overlay** - Creates focus by dimming the background with a cut-out hole
-- 📦 Installation
+- 📏 **Highlight Padding** - Add extra space around highlighted targets
+- 🔒 **Safe Area Support** - Optional control over safe area behavior
+- 🧩 **Sequential Tours** - Easily create multi-step onboarding experiences
+- 🪶 **Lightweight** - Zero external dependencies beyond Flutter SDK
+- ⚡ **Simple API** - Widget-based, easy to integrate
+
+---
+
+## 📦 Installation
 
 Add this to your package's `pubspec.yaml` file:
 
@@ -90,57 +96,48 @@ That's it! Your first coachmark is ready. 🎉
 
 ## 📚 Examples
 
-### Basic Usag
+### Basic Usage
 
-```bash
-flutter pub get
-```
-
-## Usage
-
-### Basic Example
+Show a simple coachmark on any widget:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:coachmark/coachmark.dart';
 
-class MyWidget extends StatefulWidget {
+class BasicExample extends StatefulWidget {
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<BasicExample> createState() => _BasicExampleState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _BasicExampleState extends State<BasicExample> {
   bool _showCoachmark = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Coachmark Example')),
+      appBar: AppBar(title: const Text('Coachmark Example')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Coachmark(
               isVisible: _showCoachmark,
-              config: CoachmarkConfig(
+              config: const CoachmarkConfig(
                 description: 'Tap this button to perform an action!',
                 highlightBorderColor: Colors.blue,
-                bubbleBackgroundColor: Colors.white,
               ),
-              onDismiss: () {
-                setState(() => _showCoachmark = false);
-              },
+              onDismiss: () => setState(() => _showCoachmark = false),
               child: ElevatedButton(
-                onPressed: () {},
-                child: Text('My Button'),
+                onPressed: () {
+                  // Your action
+                },
+                child: const Text('Action Button'),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextButton(
-              onPressed: () {
-                setState(() => _showCoachmark = true);
-              },
-              child: Text('Show Coachmark'),
+              onPressed: () => setState(() => _showCoachmark = true),
+              child: const Text('Show Coachmark'),
             ),
           ],
         ),
@@ -150,69 +147,185 @@ class _MyWidgetState extends State<MyWidget> {
 }
 ```
 
-### Advanced Configuration
+### Custom Styling
+
+Create a beautifully styled coachmark:
 
 ```dart
 Coachmark(
   isVisible: true,
   config: CoachmarkConfig(
-    description: 'This is an important feature you should know about!',
-    descriptionStyle: TextStyle(
-      fontSize: 18,
+    description: 'This feature helps you accomplish your goals faster!',
+    descriptionStyle: const TextStyle(
+      fontSize: 16,
       color: Colors.white,
       fontWeight: FontWeight.w500,
     ),
-    bubbleBackgroundColor: Color(0xFF2C3E50),
+    bubbleBackgroundColor: const Color(0xFF2C3E50),
     bubbleBorderColor: Colors.blueAccent,
     highlightBorderColor: Colors.greenAccent,
     highlightBorderWidth: 3.0,
     highlightCornerRadius: 16.0,
+    highlightPadding: const EdgeInsets.all(8.0), // Add space around target
     bubbleCornerRadius: 12.0,
-    bubblePadding: EdgeInsets.all(20.0),
-    bubbleMaxWidth: 350.0,
-    overlayColor: Color(0xAA000000),
+    bubblePadding: const EdgeInsets.all(20.0),
+    bubbleMaxWidth: 320.0,
+    overlayColor: const Color(0xAA000000),
     spacing: 16.0,
     preferredPosition: CoachmarkBubblePosition.bottom,
     bubbleShadow: [
       BoxShadow(
-        color: Colors.black26,
+        color: Colors.black.withOpacity(0.3),
         blurRadius: 20,
-        offset: Offset(0, 10),
+        offset: const Offset(0, 10),
       ),
     ],
   ),
   onDismiss: () {
-    print('Coachmark dismissed');
+    // Handle dismiss
   },
   child: YourWidget(),
 )
 ```
 
-### Sequential Coachmarks
+### Sequential Tour
 
-You can create a tour by showing multiple coachmarks in sequence:
+Create a multi-step onboarding tour:
 
 ```dart
 class OnboardingTour extends StatefulWidget {
+  const OnboardingTour({super.key});
+
   @override
   State<OnboardingTour> createState() => _OnboardingTourState();
 }
 
 class _OnboardingTourState extends State<OnboardingTour> {
-  int _currentStep = 0;
+  bool _showStep1 = false;
+  bool _showStep2 = false;
+  bool _showStep3 = false;
+
+  void _startTour() {
+    setState(() => _showStep1 = true);
+  }
 
   void _nextStep() {
     setState(() {
-      if (_currentStep < 2) {
-        _currentStep++;
+      if (_showStep1) {
+        _showStep1 = false;
+        _showStep2 = true;
+      } else if (_showStep2) {
+        _showStep2 = false;
+        _showStep3 = true;
       } else {
-        _currentStep = -1; // Hide all
+        _showStep3 = false;
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Product Tour'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline),
+            onPressed: _startTour,
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Step 1: Highlight a menu item
+          Coachmark(
+            isVisible: _showStep1,
+            config: const CoachmarkConfig(
+              description: '👋 Welcome! Tap the help icon to restart this tour.',
+              bubbleBackgroundColor: Colors.blue,
+              descriptionStyle: TextStyle(color: Colors.white),
+            ),
+            onDismiss: _nextStep,
+            child: ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
+              onTap: () {},
+            ),
+          ),
+          
+          // Step 2: Highlight settings
+          Coachmark(
+            isVisible: _showStep2,
+            config: const CoachmarkConfig(
+              description: '⚙️ Access your settings here.',
+              highlightBorderColor: Colors.orange,
+            ),
+            onDismiss: _nextStep,
+            child: ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {},
+            ),
+          ),
+          
+          // Step 3: Highlight profile
+          Coachmark(
+            isVisible: _showStep3,
+            config: const CoachmarkConfig(
+              description: '👤 View and edit your profile information.',
+              bubbleBackgroundColor: Colors.green,
+              descriptionStyle: TextStyle(color: Colors.white),
+            ),
+            onDismiss: _nextStep,
+            child: ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
+              onTap: () {},
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+### Highlight Padding Example
+
+Add space around small tap targets:
+
+```dart
+Coachmark(
+  isVisible: true,
+  config: const CoachmarkConfig(
+    description: 'Tap here to add a new item',
+    highlightPadding: EdgeInsets.all(12.0), // Expands the highlight area
+    highlightBorderColor: Colors.purple,
+  ),
+  onDismiss: () {},
+  child: IconButton(
+    icon: const Icon(Icons.add),
+    onPressed: () {},
+  ),
+)
+```
+
+### Safe Area Control
+
+Control whether the bubble respects safe areas:
+
+```dart
+Coachmark(
+  isVisible: true,
+  config: const CoachmarkConfig(
+    description: 'This bubble can draw behind the status bar',
+    drawOverSafeArea: true, // Allow bubble to extend into safe areas
+  ),
+  onDismiss: () {},
+  child: YourWidget(),
+)
+```
+
 ---
 
 ## 📖 API Reference
@@ -307,29 +420,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
-```
-MIT License
-
-Copyright (c) 2025 Ahmed Yousef
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -348,42 +439,4 @@ SOFTWARE.
 
 If you find this package helpful, please consider giving it a ⭐️!
 
-</div>ehavior |
-| isVisible | bool | No | Whether to show the coachmark (default: false) |
-| onDismiss | VoidCallback? | No | Called when the overlay is dismissed |
-| childKey | GlobalKey? | No | Optional key for the child widget |
-
-### CoachmarkConfig
-
-| Property | Type | Default | Description |
-| ---------- | ------ | --------- | ------------- |
-| description | String | Required | Text shown in the bubble |
-| descriptionStyle | TextStyle? | null | Style for the description text |
-| bubbleBackgroundColor | Color | Colors.white | Background color of the bubble |
-| bubbleBorderColor | Color? | null | Border color of the bubble |
-| highlightBorderColor | Color | Colors.green | Border color around the target |
-| highlightBorderWidth | double | 2.0 | Border width around the target |
-| highlightCornerRadius | double | 12.0 | Corner radius of the highlight |
-| bubbleCornerRadius | double | 12.0 | Corner radius of the bubble |
-| bubblePadding | EdgeInsets | EdgeInsets.all(16.0) | Padding inside the bubble |
-| bubbleMaxWidth | double | 300.0 | Maximum width of the bubble |
-| overlayColor | Color | Color(0x8C000000) | Dim overlay background color |
-| bubbleShadow | List<BoxShadow>? | null | Shadow for the bubble |
-| spacing | double | 12.0 | Space between target and bubble |
-| preferredPosition | CoachmarkBubblePosition | auto | Preferred bubble position |
-
-### CoachmarkBubblePosition
-
-- `auto` - Automatically choose the best position
-- `left` - Place bubble to the left of the target
-- `right` - Place bubble to the right of the target
-- `top` - Place bubble above the target
-- `bottom` - Place bubble below the target
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+</div>
