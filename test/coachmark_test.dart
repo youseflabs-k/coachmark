@@ -86,11 +86,16 @@ void main() {
   group('CoachmarkBubblePosition Tests', () {
     test('CoachmarkBubblePosition has all positions', () {
       expect(CoachmarkBubblePosition.values, hasLength(5));
-      expect(CoachmarkBubblePosition.values, contains(CoachmarkBubblePosition.auto));
-      expect(CoachmarkBubblePosition.values, contains(CoachmarkBubblePosition.left));
-      expect(CoachmarkBubblePosition.values, contains(CoachmarkBubblePosition.right));
-      expect(CoachmarkBubblePosition.values, contains(CoachmarkBubblePosition.top));
-      expect(CoachmarkBubblePosition.values, contains(CoachmarkBubblePosition.bottom));
+      expect(CoachmarkBubblePosition.values,
+          contains(CoachmarkBubblePosition.auto));
+      expect(CoachmarkBubblePosition.values,
+          contains(CoachmarkBubblePosition.left));
+      expect(CoachmarkBubblePosition.values,
+          contains(CoachmarkBubblePosition.right));
+      expect(CoachmarkBubblePosition.values,
+          contains(CoachmarkBubblePosition.top));
+      expect(CoachmarkBubblePosition.values,
+          contains(CoachmarkBubblePosition.bottom));
     });
   });
 }

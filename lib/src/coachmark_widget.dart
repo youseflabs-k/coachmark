@@ -6,16 +6,16 @@ import 'coachmark_config.dart';
 class Coachmark extends StatefulWidget {
   /// The widget to be highlighted
   final Widget child;
-  
+
   /// Configuration for the coachmark appearance
   final CoachmarkConfig config;
-  
+
   /// Whether the coachmark overlay is currently visible
   final bool isVisible;
-  
+
   /// Callback when the overlay is dismissed
   final VoidCallback? onDismiss;
-  
+
   /// Optional key for the child widget
   final GlobalKey? childKey;
 
@@ -146,7 +146,8 @@ class _CoachmarkOverlay extends StatelessWidget {
             child: IgnorePointer(
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(config.highlightCornerRadius),
+                  borderRadius:
+                      BorderRadius.circular(config.highlightCornerRadius),
                   border: Border.all(
                     color: config.highlightBorderColor,
                     width: config.highlightBorderWidth,
@@ -240,15 +241,13 @@ class _CoachmarkOverlay extends StatelessWidget {
       case CoachmarkBubblePosition.left:
         x = (targetRect.left - bubbleMaxWidth - padding)
             .clamp(padding, screenSize.width - bubbleMaxWidth - padding);
-        y = (targetRect.center.dy - 70)
-            .clamp(padding, screenSize.height - 140);
+        y = (targetRect.center.dy - 70).clamp(padding, screenSize.height - 140);
         break;
 
       case CoachmarkBubblePosition.right:
         x = (targetRect.right + padding)
             .clamp(padding, screenSize.width - bubbleMaxWidth - padding);
-        y = (targetRect.center.dy - 70)
-            .clamp(padding, screenSize.height - 140);
+        y = (targetRect.center.dy - 70).clamp(padding, screenSize.height - 140);
         break;
 
       case CoachmarkBubblePosition.top:
@@ -302,7 +301,7 @@ class _HolePainter extends CustomPainter {
     final Paint dimPaint = Paint()..color = overlayColor;
     canvas.saveLayer(Offset.zero & size, Paint());
     canvas.drawPath(background, dimPaint);
-    
+
     final Paint clearPaint = Paint()..blendMode = BlendMode.clear;
     canvas.drawPath(cutout, clearPaint);
     canvas.restore();

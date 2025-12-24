@@ -67,7 +67,7 @@ class _CoachmarkDemoState extends State<CoachmarkDemo> {
             config: const CoachmarkConfig(
               description: 'Tap this help icon anytime to restart the tour.',
               bubbleBackgroundColor: Colors.blue,
-              highlightBorderColor: Colors.blue
+              highlightBorderColor: Colors.blue,
             ),
             child: IconButton(
               icon: const Icon(Icons.help_outline),
@@ -90,13 +90,15 @@ class _CoachmarkDemoState extends State<CoachmarkDemo> {
                 });
               },
               config: const CoachmarkConfig(
-                description: 'This shows how many times you have pressed the button.',
+                description:
+                    'This shows how many times you have pressed the button.',
                 highlightBorderColor: Colors.orange,
-                highlightPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                highlightPadding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
               ),
-              child: const Text(
-                'You have pushed the button this many times:',
-              ),
+              child: const Text('You have pushed the button this many times:'),
             ),
             const SizedBox(height: 8),
             Text(
